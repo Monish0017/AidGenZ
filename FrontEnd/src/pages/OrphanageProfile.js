@@ -52,12 +52,12 @@ const OrphanageProfile = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get('http://localhost:5000/api/orphanage/profile', {
+        const response = await axios.get('https://aidgenz.onrender.com/api/orphanage/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProfile(response.data);
         // Fetch stats
-        const statsResponse = await axios.get('http://localhost:5000/api/orphanage/stats', {
+        const statsResponse = await axios.get('https://aidgenz.onrender.com/api/orphanage/stats', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setStats(statsResponse.data);

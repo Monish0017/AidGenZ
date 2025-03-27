@@ -17,7 +17,7 @@ const DonationsThread = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:5000/api/orphanage/available-donations", {
+        const response = await axios.get("https://aidgenz.onrender.com/api/orphanage/available-donations", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -40,7 +40,7 @@ const DonationsThread = () => {
   const acceptDonation = async (donationId) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/orphanage/accept-donation/${donationId}`,
+        `https://aidgenz.onrender.com/api/orphanage/accept-donation/${donationId}`,
         { orphanageId: "your-orphanage-id" }, // Replace with the current orphanage ID
         { headers: { Authorization: `Bearer ${token}` } }
       );

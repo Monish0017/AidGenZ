@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // API URLs
-const API_URL = 'http://localhost:5000/api/donor/view-request';
-const ACCEPT_REQUEST_URL = 'http://localhost:5000/api/donor/accept-request';
+const API_URL = 'https://aidgenz.onrender.com/api/donor/view-request';
+const ACCEPT_REQUEST_URL = 'https://aidgenz.onrender.com/api/donor/accept-request';
 
 const RequestedDonations = () => {
     const [requests, setRequests] = useState([]);

@@ -20,7 +20,7 @@ const ProfileOrphanage = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:5000/api/orphanage/profile', {
+        const response = await axios.get('https://aidgenz.onrender.com/api/orphanage/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -33,7 +33,7 @@ const ProfileOrphanage = () => {
 
     const fetchOrphanageRequests = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/requests', {
+        const response = await axios.get('https://aidgenz.onrender.com/api/requests', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -50,7 +50,7 @@ const ProfileOrphanage = () => {
 
   const handleDeleteRequest = async (requestId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/requests/${requestId}`, {
+      await axios.delete(`https://aidgenz.onrender.com/api/requests/${requestId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

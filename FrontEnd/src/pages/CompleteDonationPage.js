@@ -15,7 +15,7 @@ const CompleteDonationPage = () => {
   useEffect(() => {
     const fetchDonationDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/donations/${donationId}`);
+        const response = await axios.get(`https://aidgenz.onrender.com/api/donations/${donationId}`);
         setDonation(response.data);  // Store donation data in state
       } catch (err) {
         setError('Error fetching donation details');
@@ -37,7 +37,7 @@ const CompleteDonationPage = () => {
 
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/orphanage/complete/${donationId}`,
+        `https://aidgenz.onrender.com/api/orphanage/complete/${donationId}`,
         { rating, comment },
         {
           headers: {

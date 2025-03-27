@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import '../CSS/TopDonors.css';
 
-const TOP_DONORS_API_URL = "http://localhost:5000/api/leaderboard/top-donors"; // Adjust the URL as needed
+const TOP_DONORS_API_URL = "https://aidgenz.onrender.com/api/leaderboard/top-donors"; // Adjust the URL as needed
 
 const TopDonors = () => {
   const [donors, setDonors] = useState([]);

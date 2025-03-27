@@ -62,7 +62,7 @@ const DonorList = () => {
         formData.append('itemImages', image);
       });
 
-      await axios.post('http://localhost:5000/api/donor/add-donation', formData, {
+      await axios.post('https://aidgenz.onrender.com/api/donor/add-donation', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
