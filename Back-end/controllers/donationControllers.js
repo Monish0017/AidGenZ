@@ -30,43 +30,45 @@ export const getDonationDetails = async (req, res) => {
 };
 
 
-// Delete a donation item along with its associated file on Cloudinary
+// Delete a donation item along with its associated images on Cloudinary
 export const deleteDonationItem = async (req, res) => {
   const { donationId } = req.params;
 
   try {
-    // Find the donation item
+    // Find the donation item in the database
     const donation = await DonationItem.findById(donationId);
     if (!donation) {
       return res.status(404).json({ message: "Donation item not found" });
     }
 
-    // Delete the associated file from Cloudinary (if it exists)
-    if (donation.imageUrls) { // Assuming fileUrl stores the Cloudinary URL
-      console.log("🗑️ Deleting file from Cloudinary:", donation.imageUrls);
+    // Delete associated images from Cloudinary
+    if (donation.imageUrls && donation.imageUrls.length > 0) {
+      console.log("🗑️ Deleting images from Cloudinary:", donation.imageUrls);
 
-      // Extract public ID from Cloudinary URL
-      const parts = donation.fileUrl.split('/');
-      const fileName = parts.pop(); // Get the last part
-      const publicId = fileName.split('.')[0]; // Remove extension (e.g., "file.pdf" -> "file")
+      for (const imageUrl of donation.imageUrls) {
+        try {
+          // Extract the filename with folder (Cloudinary stores files as 'donation-system/filename')
+          const urlParts = imageUrl.split('/');
+          const fileName = urlParts.pop(); // Get last part (e.g., "sample.jpg")
+          const folderName = urlParts[urlParts.length - 1] === "donation-system" ? "donation-system" : ""; // Ensure folder
+          const publicId = folderName ? `${folderName}/${fileName.split('.')[0]}` : fileName.split('.')[0]; // Remove extension
 
-      // Determine resource type (image or raw)
-      const isImage = donation.fileUrl.includes('/image/upload/');
-      const resourceType = isImage ? 'image' : 'raw';
+          // Delete from Cloudinary
+          await cloudinary.v2.uploader.destroy(publicId, { resource_type: 'image' });
 
-      // Delete from Cloudinary
-      await cloudinary.v2.uploader.destroy(publicId, { resource_type: resourceType });
-
-      console.log("✅ Cloudinary file deleted successfully.");
+          console.log(`✅ Cloudinary image deleted: ${publicId}`);
+        } catch (cloudError) {
+          console.error(`❌ Error deleting Cloudinary image (${imageUrl}):`, cloudError);
+        }
+      }
     }
 
     // Delete the donation item from the database
     await DonationItem.findByIdAndDelete(donationId);
 
-    res.status(200).json({ message: "Donation item and associated file deleted successfully" });
+    res.status(200).json({ message: "Donation item and associated images deleted successfully" });
   } catch (error) {
     console.error("❌ Error deleting donation item:", error);
     res.status(500).json({ message: "Error deleting donation item", error });
   }
 };
-
