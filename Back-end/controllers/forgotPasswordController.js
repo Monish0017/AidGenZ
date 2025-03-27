@@ -24,7 +24,7 @@ export const forgotPassword = async (req, res) => {
     await user.save();
 
     // Password Reset Link
-    const resetUrl = `http://localhost:3000/reset-password/${token}`;
+    const resetUrl = `https://aid-gen-z.vercel.app/reset-password/${token}`;
 
     // Email Content
     const mailOptions = {
