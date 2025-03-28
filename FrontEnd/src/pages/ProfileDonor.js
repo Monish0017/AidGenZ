@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./ProfileDonor.css"; // We'll create this CSS file for additional styling
 
 const ProfileDonor = () => {
   const [donor, setDonor] = useState(null);
@@ -59,114 +60,160 @@ const ProfileDonor = () => {
   };
 
   if (loading) {
-    return <div className="text-center mt-5">Loading...</div>;
+    return <div className="loading-container"><div className="spinner"></div></div>;
   }
 
   if (error) {
-    return <div className="text-center text-danger mt-5">{error}</div>;
+    return <div className="error-message">{error}</div>;
   }
 
   if (!donor) {
-    return <div className="text-center mt-5">No donor data available.</div>;
+    return <div className="empty-state">No donor data available.</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center">Donor Profile</h2>
-      <div className="row mt-4">
-        <div className="col-md-4 text-center">
-          <img
-            src={donor.donor.profileImage || "/default-profile-image.png"}
-            alt="Profile"
-            className="img-fluid rounded-circle border shadow"
-            style={{ width: "200px", height: "200px", objectFit: "cover" }}
-          />
+    <div className="profile-container">
+      <div className="profile-header">
+        <h2>Donor Profile</h2>
+        <p className="subtitle">Your donation journey with AidGenZ</p>
+      </div>
+      
+      <div className="profile-content">
+        <div className="profile-sidebar">
+          <div className="profile-image-container">
+            <img
+              src={donor.donor.profileImage || "/default-profile-image.png"}
+              alt="Profile"
+              className="profile-image"
+            />
+          </div>
+          <div className="profile-stats">
+            <div className="stat-item">
+              <span className="stat-value">{donor.donations?.length || 0}</span>
+              <span className="stat-label">Donations</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{donor.donor.points || 0}</span>
+              <span className="stat-label">Credits</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value">{donor.acceptedRequests?.length || 0}</span>
+              <span className="stat-label">Requests</span>
+            </div>
+          </div>
         </div>
-        <div className="col-md-8">
-          <div className="card shadow-sm p-3">
-            <h4>{donor.donor.name}</h4>
-            <p><strong>Email:</strong> {donor.donor.email}</p>
-            <p><strong>Location:</strong> {donor.donor.location || "Not provided"}</p>
-            <p><strong>Phone:</strong> {donor.donor.phoneNo || "Not provided"}</p>
-            <p><strong>Credits:</strong> {donor.donor.points || 0}</p>
+        
+        <div className="profile-main">
+          <div className="profile-card">
+            <h3 className="card-title">Personal Information</h3>
+            <div className="info-row">
+              <div className="info-label">Name</div>
+              <div className="info-value">{donor.donor.name}</div>
+            </div>
+            <div className="info-row">
+              <div className="info-label">Email</div>
+              <div className="info-value">{donor.donor.email}</div>
+            </div>
+            <div className="info-row">
+              <div className="info-label">Location</div>
+              <div className="info-value">{donor.donor.location || "Not provided"}</div>
+            </div>
+            <div className="info-row">
+              <div className="info-label">Phone</div>
+              <div className="info-value">{donor.donor.phoneNo || "Not provided"}</div>
+            </div>
           </div>
 
           {/* Recent Donations */}
-          <div className="mt-4">
-            <h5>Recent Donations:</h5>
+          <div className="profile-card">
+            <h3 className="card-title">Recent Donations</h3>
             {donor.donations && donor.donations.length > 0 ? (
-              <ul className="list-group">
-                {donor.donations.map((donation, index) => (
-                  <li key={index} className="list-group-item">
-                    {donation.itemName} - {donation.quantity}
+              <ul className="activity-list">
+                {donor.donations.slice(0, 3).map((donation, index) => (
+                  <li key={index} className="activity-item">
+                    <div className="activity-icon">📦</div>
+                    <div className="activity-details">
+                      <span className="activity-title">{donation.itemName}</span>
+                      <span className="activity-meta">Quantity: {donation.quantity}</span>
+                    </div>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-muted">No recent donations.</p>
+              <p className="empty-message">No recent donations.</p>
             )}
           </div>
 
           {/* Accepted Requests */}
-          <hr />
-          <div className="mt-4">
-            <h5>Accepted Donation Requests:</h5>
+          <div className="profile-card">
+            <h3 className="card-title">Accepted Requests</h3>
             {donor.acceptedRequests && donor.acceptedRequests.length > 0 ? (
-              <ul className="list-group">
+              <div className="request-list">
                 {donor.acceptedRequests.map((request, index) => (
-                  <li key={index} className="list-group-item">
-                    <strong>Phone:</strong> {request.phoneNo}
-                    <br />
-                    <strong>Orphanage:</strong> {request.name}
-                    <br />
-                    <strong>Items Needed:</strong> {Array.isArray(request.itemsNeeded) ? request.itemsNeeded.join(", ") : "No items listed"}
-                    <br />
-                    <strong>Urgency:</strong> {request.urgency}
-                    <br />
-                    <strong>Status:</strong> {request.status}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-muted">No accepted requests.</p>
-            )}
-          </div>
-          
-          {/* All Donations */}
-          <hr />
-          <div className="mt-4">
-            <h5>All Donations:</h5>
-            {donor.donations && donor.donations.length > 0 ? (
-              <div className="row">
-                {donor.donations.map((donation) => (
-                  <div key={donation._id} className="col-md-4 mb-4">
-                    <div className="card shadow-sm">
-                      {donation.imageUrls && donation.imageUrls.length > 0 && (
-                        <img
-                          src={donation.imageUrls[0]}
-                          alt={donation.itemName}
-                          className="card-img-top"
-                          style={{ height: "200px", objectFit: "cover" }}
-                        />
-                      )}
-                      <div className="card-body">
-                        <h5 className="card-title">{donation.itemName}</h5>
-                        <p className="card-text">Category: {donation.category}</p>
-                        <p className="card-text">Quantity: {donation.quantity}</p>
-                        <p className="card-text">Status: {donation.status}</p>
-                        <button
-                          className="btn btn-danger w-100 mt-2"
-                          onClick={() => handleDeleteDonation(donation._id)}
-                        >
-                          Delete
-                        </button>
+                  <div key={index} className="request-item">
+                    <div className="request-header">
+                      <span className="request-title">{request.name}</span>
+                      <span className={`request-badge ${request.urgency.toLowerCase()}`}>{request.urgency}</span>
+                    </div>
+                    <div className="request-details">
+                      <div className="request-detail">
+                        <span className="detail-label">Phone:</span>
+                        <span className="detail-value">{request.phoneNo}</span>
+                      </div>
+                      <div className="request-detail">
+                        <span className="detail-label">Items:</span>
+                        <span className="detail-value">{Array.isArray(request.itemsNeeded) ? request.itemsNeeded.join(", ") : "No items listed"}</span>
+                      </div>
+                      <div className="request-detail">
+                        <span className="detail-label">Status:</span>
+                        <span className="detail-value status-badge">{request.status}</span>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-muted">No donations found.</p>
+              <p className="empty-message">No accepted requests.</p>
+            )}
+          </div>
+          
+          {/* All Donations */}
+          <div className="profile-card">
+            <h3 className="card-title">All Donations</h3>
+            {donor.donations && donor.donations.length > 0 ? (
+              <div className="donation-grid">
+                {donor.donations.map((donation) => (
+                  <div key={donation._id} className="donation-card">
+                    <div className="donation-image-container">
+                      {donation.imageUrls && donation.imageUrls.length > 0 ? (
+                        <img
+                          src={donation.imageUrls[0]}
+                          alt={donation.itemName}
+                          className="donation-image"
+                        />
+                      ) : (
+                        <div className="donation-image-placeholder">No Image</div>
+                      )}
+                      <div className="donation-status-badge">{donation.status}</div>
+                    </div>
+                    <div className="donation-content">
+                      <h4 className="donation-title">{donation.itemName}</h4>
+                      <div className="donation-details">
+                        <span className="donation-category">{donation.category}</span>
+                        <span className="donation-quantity">Qty: {donation.quantity}</span>
+                      </div>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDeleteDonation(donation._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="empty-message">No donations found.</p>
             )}
           </div>
         </div>

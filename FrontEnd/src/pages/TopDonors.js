@@ -3,24 +3,35 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import '../CSS/TopDonors.css';
 
-const TOP_DONORS_API_URL = "http://localhost:5000/api/leaderboard/top-donors"; // Adjust the URL as needed
+const TOP_DONORS_API_URL = "http://localhost:5000/api/leaderboard/top-donors";
 
 const TopDonors = () => {
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTopDonors = async () => {
       try {
-        const response = await axios.get(TOP_DONORS_API_URL, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        });
-        setDonors(response.data);
-        setLoading(false);
+        setLoading(true);
+        setError(null);
+        
+        // Get auth token if available
+        const authToken = localStorage.getItem('authToken');
+        const headers = authToken ? { 'Authorization': `Bearer ${authToken}` } : {};
+
+        const response = await axios.get(TOP_DONORS_API_URL, { headers });
+        
+        if (response.data && Array.isArray(response.data)) {
+          setDonors(response.data);
+        } else {
+          console.error('Invalid data format received:', response.data);
+          setError('Received invalid data format from server');
+        }
       } catch (error) {
         console.error('Error fetching top donors:', error);
+        setError(error.response?.data?.message || 'Failed to load donors. Please try again later.');
+      } finally {
         setLoading(false);
       }
     };
@@ -38,6 +49,30 @@ const TopDonors = () => {
       <div className="loading-container">
         <div className="spinner"></div>
         <p>Loading top donors...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <h3>Something went wrong</h3>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="btn btn-primary">
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  if (donors.length === 0) {
+    return (
+      <div className="empty-state-container">
+        <h3>No donors found</h3>
+        <p>Be the first to donate and make a difference!</p>
+        <Link to="/donor-auth" className="btn btn-primary">
+          Start Donating
+        </Link>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 .top-donors-container {
-  padding-top: 76px;
+  padding-top: 80px; /* Space for fixed navbar */
   background-color: #f8f9fa;
 }
 
@@ -19,17 +19,18 @@
 
 .donor-card {
   background: white;
-  border-radius: 15px;
+  border-radius: 8px;
   padding: 30px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .donor-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
 .donor-card.top-three {
@@ -133,16 +134,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 60vh;
+  margin-top: 80px; /* Space for fixed navbar */
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #007bff;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #007bff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
 }
 
 @keyframes spin {
@@ -168,6 +171,36 @@
   font-size: 0.9rem;
 }
 
+/* New error and empty state styles */
+.error-container,
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  padding: 2rem;
+  margin-top: 80px; /* Space for fixed navbar */
+}
+
+.error-container h3,
+.empty-state-container h3 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.error-container p {
+  color: #dc3545;
+  margin-bottom: 2rem;
+}
+
+.empty-state-container p {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* Ensure responsive behavior */
 @media (max-width: 768px) {
   .donor-card {
     margin-bottom: 20px;
@@ -177,4 +210,4 @@
     flex-direction: column;
     gap: 10px;
   }
-} 
+}

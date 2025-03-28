@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import './DonorList.css';
 
 const DonorList = () => {
   const [donationData, setDonationData] = useState({
@@ -83,12 +84,17 @@ const DonorList = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center">Add a Donation</h2>
+    <div className="donation-container">
+      <div className="donation-header">
+        <h2>Add a Donation</h2>
+        <p>Share your items with those in need and make a difference today</p>
+      </div>
+      
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
-      <form onSubmit={handleDonationSubmit}>
-        <div className="mb-3">
+      
+      <form onSubmit={handleDonationSubmit} className="donation-form">
+        <div className="form-group">
           <label htmlFor="itemName" className="form-label">Item Name</label>
           <input
             type="text"
@@ -97,10 +103,12 @@ const DonorList = () => {
             name="itemName"
             value={donationData.itemName}
             onChange={handleDonationChange}
+            placeholder="Enter the name of the item"
             required
           />
         </div>
-        <div className="mb-3">
+        
+        <div className="form-group">
           <label htmlFor="quantity" className="form-label">Quantity</label>
           <input
             type="number"
@@ -109,49 +117,68 @@ const DonorList = () => {
             name="quantity"
             value={donationData.quantity}
             onChange={handleDonationChange}
+            placeholder="How many items are you donating?"
             required
           />
         </div>
-        <div className="mb-3">
+        
+        <div className="form-group">
           <label htmlFor="category" className="form-label">Category</label>
-          <input
-            type="text"
+          <select
             className="form-control"
             id="category"
             name="category"
             value={donationData.category}
             onChange={handleDonationChange}
             required
-          />
+          >
+            <option value="">Select a category</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Food">Food</option>
+            <option value="Books">Books</option>
+            <option value="Toys">Toys</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
-        <div className="mb-3">
+        
+        <div className="form-group">
           <label htmlFor="itemImages" className="form-label">Item Images</label>
-          <input
-            type="file"
-            className="form-control"
-            id="itemImages"
-            name="itemImages"
-            multiple
-            onChange={handleFileChange}
-            required
-          />
+          <div className="file-upload-container">
+            <label className="file-upload-label">
+              <div className="file-upload-icon">📸</div>
+              <div className="file-upload-text">Drag & drop images here or click to browse</div>
+              <div className="file-upload-subtext">Upload high-quality images of your donation items</div>
+              <input
+                type="file"
+                className="file-input"
+                id="itemImages"
+                name="itemImages"
+                multiple
+                onChange={handleFileChange}
+                required
+              />
+            </label>
+          </div>
         </div>
+        
         {donationData.itemImages.length > 0 && (
-          <div className="mb-3">
-            <h5>Selected Images:</h5>
-            <div className="d-flex flex-wrap">
+          <div className="image-preview-container">
+            <h5 className="image-preview-title">Selected Images</h5>
+            <div className="image-preview-grid">
               {donationData.itemImages.map((image, index) => (
-                <div key={index} className="position-relative m-2">
+                <div key={index} className="image-preview-item">
                   <img
                     src={URL.createObjectURL(image)}
-                    alt={`Selected ${index}`}
-                    className="img-thumbnail"
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                    alt={`Selected ${index + 1}`}
+                    className="preview-image"
                   />
                   <button
                     type="button"
-                    className="btn btn-danger btn-sm position-absolute top-0 end-0"
+                    className="remove-image-btn"
                     onClick={() => removeImage(index)}
+                    aria-label="Remove image"
                   >
                     ×
                   </button>
@@ -160,7 +187,10 @@ const DonorList = () => {
             </div>
           </div>
         )}
-        <button type="submit" className="btn btn-primary">Add Donation</button>
+        
+        <button type="submit" className="submit-btn">
+          Add Donation
+        </button>
       </form>
     </div>
   );
