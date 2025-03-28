@@ -18,7 +18,7 @@ const ProfileDonor = () => {
 
     const fetchDonorProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/donor/profile", {
+        const response = await axios.get("https://aidgenz.onrender.com/api/donor/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -43,7 +43,7 @@ const ProfileDonor = () => {
     if (!window.confirm("Are you sure you want to delete this donation?")) return;
 
     try {
-      const response = await axios.delete(`http://localhost:5000/api/donations/delete-donation/${donationId}`, {
+      const response = await axios.delete(`https://aidgenz.onrender.com/api/donations/delete-donation/${donationId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

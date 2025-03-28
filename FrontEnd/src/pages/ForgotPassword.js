@@ -9,7 +9,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/forgot-password', { email, userType });
+      const response = await axios.post('https://aidgenz.onrender.com/api/forgot-password', { email, userType });
       setMessage(response.data.message);
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error sending reset link.');

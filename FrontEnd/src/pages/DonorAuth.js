@@ -41,8 +41,8 @@ const DonorAuth = () => {
     setError("");
     setIsLoading(true);
     const apiUrl = isRegister 
-      ? "http://localhost:5000/api/donor/register" 
-      : "http://localhost:5000/api/donor/login";
+      ? "https://aidgenz.onrender.com/api/donor/register" 
+      : "https://aidgenz.onrender.com/api/donor/login";
     
     let formDataToSend;
 

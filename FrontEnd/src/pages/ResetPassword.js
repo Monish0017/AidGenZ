@@ -14,7 +14,7 @@ const ResetPassword = () => {
     try {
       // Send userType as query parameter
       const response = await axios.post(
-        `http://localhost:5000/api/reset-password/${token}?userType=${userType}`,
+        `https://aidgenz.onrender.com/api/reset-password/${token}?userType=${userType}`,
         { password }
       );
       setMessage(response.data.message);

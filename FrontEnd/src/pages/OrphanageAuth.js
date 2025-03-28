@@ -36,8 +36,8 @@ const OrphanageAuth = () => {
     setError("");
     setIsLoading(true);
     const apiUrl = isRegister 
-      ? "http://localhost:5000/api/orphanage/register" 
-      : "http://localhost:5000/api/orphanage/login";
+      ? "https://aidgenz.onrender.com/api/orphanage/register" 
+      : "https://aidgenz.onrender.com/api/orphanage/login";
     
     let formDataToSend;
 

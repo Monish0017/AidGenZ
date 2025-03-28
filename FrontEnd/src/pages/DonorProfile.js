@@ -14,7 +14,7 @@ const ProfileDonor = () => {
     const fetchDonorProfile = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/orphanage/${donorId}`, // ✅ Corrected API endpoint
+          `https://aidgenz.onrender.com/api/orphanage/${donorId}`, // ✅ Corrected API endpoint
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
